@@ -10,12 +10,12 @@
 	<host>
 		<name>www.ls.example.com</name>
 		<alias>ls.example.com</alias>
-		<dirlist>/var/www/ls.example.com/</dirlist>
+		<static>/var/www/ls.example.com/</static>
 	</host>
 
 	<host>
 		<name>dav.example.com</name>
-		<dirlist dav="true">/var/www/dav.example.com/</dirlist>
+		<static dav="true">/var/www/dav.example.com/</static>
 	</host>
 
 	<host>
@@ -26,5 +26,8 @@
 	<host>
 		<name>wsgi.example.com</name>
 		<wsgi>/var/www/wsgi.example.com/website.wsgi</wsgi>
+		<location path="/static/">
+			<static>/var/www/wsgi.example.com/static/</static>
+		</location>
 	</host>
 </config>

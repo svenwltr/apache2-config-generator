@@ -23,7 +23,8 @@ public class AliasSection implements ConfigSection<List<ServerAlias>> {
 			return;
 
 		for (ServerAlias alias : aliases)
-			printer.writeDirective("ServerAlias", alias.getValue());
+			if (alias.getValue() != null)
+				printer.writeDirective("ServerAlias", alias.getValue());
 
 		printer.writeNewline();
 

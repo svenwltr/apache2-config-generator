@@ -19,11 +19,12 @@
     		</element>
     		<choice maxOccurs="1" minOccurs="1">
     			<element name="proxy" type="string"></element>
-    			<element name="dirlist" type="tns:DirList"></element>
+    			<element name="static" type="tns:static"></element>
 
     			<element name="php" type="string"></element>
     			<element name="wsgi" type="string"></element>
     		</choice>
+    		<element name="location" type="tns:location" maxOccurs="unbounded" minOccurs="0"></element>
     	</sequence>
     </complexType>
     <complexType name="serverAlias">
@@ -34,11 +35,26 @@
     	</simpleContent>
     </complexType>
 
-    <complexType name="DirList">
+    <complexType name="static">
     	<simpleContent>
     		<extension base="string">
     			<attribute name="dav" type="boolean"></attribute>
+    			<attribute name="index" type="boolean"></attribute>
     		</extension>
     	</simpleContent>
+    </complexType>
+
+    <complexType name="NewComplexType"></complexType>
+
+    <complexType name="location">
+    	<sequence>
+    		<element name="location" type="tns:location"
+    			maxOccurs="unbounded" minOccurs="0">
+    		</element>
+    		<choice>
+    			<element name="static" type="tns:static"></element>
+    		</choice>
+    	</sequence>
+    	<attribute name="path" type="string"></attribute>
     </complexType>
 </schema>

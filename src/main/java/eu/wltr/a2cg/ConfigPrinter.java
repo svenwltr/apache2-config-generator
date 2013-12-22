@@ -24,7 +24,7 @@ public class ConfigPrinter {
 	}
 
 	private String escape(String args) {
-		if (args.contains(" "))
+		if (args != null && args.contains(" "))
 			args = "\"" + args + "\"";
 
 		return args;

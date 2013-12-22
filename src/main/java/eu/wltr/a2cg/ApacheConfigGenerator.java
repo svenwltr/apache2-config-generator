@@ -1,6 +1,5 @@
 package eu.wltr.a2cg;
 
-import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
@@ -15,10 +14,10 @@ import eu.wltr.a2cg.schema.ConfigUnmarshaller;
 import eu.wltr.a2cg.schema.Configuration;
 import eu.wltr.a2cg.schema.VirtualHost;
 import eu.wltr.a2cg.sections.AliasSection;
-import eu.wltr.a2cg.sections.DirListSection;
 import eu.wltr.a2cg.sections.NameSection;
 import eu.wltr.a2cg.sections.PhpSection;
 import eu.wltr.a2cg.sections.ProxySection;
+import eu.wltr.a2cg.sections.StaticSection;
 import eu.wltr.a2cg.sections.WsgiSection;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
@@ -29,9 +28,10 @@ public class ApacheConfigGenerator {
 	private final LinkedHashMap<String, ConfigSection> sections;
 
 	public ApacheConfigGenerator(InputStream in, OutputStream out)
-			throws FileNotFoundException, JAXBException {
+			throws JAXBException {
 		printer = new ConfigPrinter(out);
 		config = ConfigUnmarshaller.load(in);
+
 		sections = new LinkedHashMap<String, ConfigSection>();
 
 		sections.put("name", new NameSection(printer));
@@ -39,7 +39,7 @@ public class ApacheConfigGenerator {
 		sections.put("php", new PhpSection(printer));
 		sections.put("wsgi", new WsgiSection(printer));
 		sections.put("proxy", new ProxySection(printer));
-		sections.put("dirlist", new DirListSection(printer));
+		sections.put("static", new StaticSection(printer));
 
 	}
 
