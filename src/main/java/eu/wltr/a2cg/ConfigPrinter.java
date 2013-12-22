@@ -1,5 +1,6 @@
 package eu.wltr.a2cg;
 
+import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.Stack;
 
@@ -10,8 +11,8 @@ public class ConfigPrinter {
 
 	public static final String INDENT = "    ";
 
-	public ConfigPrinter(PrintStream writer) {
-		this.writer = writer;
+	public ConfigPrinter(OutputStream out) {
+		this.writer = new PrintStream(out);
 		scopeStack = new Stack<String>();
 
 	}

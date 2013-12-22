@@ -1,8 +1,8 @@
 package eu.wltr.a2cg;
 
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.PrintStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -28,9 +28,9 @@ public class ApacheConfigGenerator {
 	private final Configuration config;
 	private final LinkedHashMap<String, ConfigSection> sections;
 
-	public ApacheConfigGenerator(File in, PrintStream writer)
+	public ApacheConfigGenerator(InputStream in, OutputStream out)
 			throws FileNotFoundException, JAXBException {
-		printer = new ConfigPrinter(writer);
+		printer = new ConfigPrinter(out);
 		config = ConfigUnmarshaller.load(in);
 		sections = new LinkedHashMap<String, ConfigSection>();
 

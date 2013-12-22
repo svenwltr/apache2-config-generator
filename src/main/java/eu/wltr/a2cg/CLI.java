@@ -1,7 +1,9 @@
 package eu.wltr.a2cg;
 
-import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.PrintStream;
 
 import javax.xml.bind.JAXBException;
@@ -37,11 +39,11 @@ public class CLI {
 				System.exit(1);
 			}
 			
-			PrintStream writer = ("-".equals(args[1])) ? System.out
+			OutputStream out = ("-".equals(args[1])) ? System.out
 					: new PrintStream(args[1]);
+			InputStream in = new FileInputStream(args[0]);
 			
-			ApacheConfigGenerator a2cg = new ApacheConfigGenerator(new File(
-					args[0]), writer);
+			ApacheConfigGenerator a2cg = new ApacheConfigGenerator(in, out);
 			a2cg.generate();
 
 		} catch (ParseException e) {

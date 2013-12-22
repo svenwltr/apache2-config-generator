@@ -1,6 +1,6 @@
 package eu.wltr.a2cg.schema;
 
-import java.io.File;
+import java.io.InputStream;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
@@ -11,8 +11,8 @@ public class ConfigUnmarshaller {
 
 	private static final ConfigUnmarshaller singleton = new ConfigUnmarshaller();
 
-	public static Configuration load(File file) throws JAXBException {
-		return singleton.unmarshall(file);
+	public static Configuration load(InputStream in) throws JAXBException {
+		return singleton.unmarshall(in);
 
 	}
 
@@ -36,9 +36,10 @@ public class ConfigUnmarshaller {
 		}
 	}
 
-	private Configuration unmarshall(File file) throws JAXBException {
+	private Configuration unmarshall(InputStream in) throws JAXBException {
 		@SuppressWarnings("unchecked")
-		JAXBElement<Configuration> el = (JAXBElement<Configuration>) unmarshaller.unmarshal(file);
+		JAXBElement<Configuration> el = (JAXBElement<Configuration>) unmarshaller
+				.unmarshal(in);
 		return el.getValue();
 
 	}
