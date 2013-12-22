@@ -44,7 +44,6 @@
     	</simpleContent>
     </complexType>
 
-    <complexType name="NewComplexType"></complexType>
 
     <complexType name="location">
     	<sequence>
