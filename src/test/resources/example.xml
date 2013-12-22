@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns="urn:eu.wltr.a2cg" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="urn:eu.wltr.a2cg ../../main/xsd/apache-config-gen.xsd">
+	<host>
+		<name>www.gh.example.com</name>
+		<alias redirect="true">gh.example.com</alias>
+		<proxy>http://www.github.org/</proxy>
+	</host>
+
+	<host>
+		<name>www.ls.example.com</name>
+		<alias>ls.example.com</alias>
+		<dirlist>/var/www/ls.example.com/</dirlist>
+	</host>
+
+	<host>
+		<name>dav.example.com</name>
+		<dirlist dav="true">/var/www/dav.example.com/</dirlist>
+	</host>
+
+	<host>
+		<name>php.example.com</name>
+		<php>/var/www/php.example.com/</php>
+	</host>
+
+	<host>
+		<name>wsgi.example.com</name>
+		<wsgi>/var/www/wsgi.example.com/website.wsgi</wsgi>
+	</host>
+</config>

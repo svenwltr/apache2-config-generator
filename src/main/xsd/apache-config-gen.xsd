@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:eu.wltr.a2cg" xmlns:tns="urn:eu.wltr.a2cg" elementFormDefault="qualified">
+
+    <element name="config" type="tns:configuration"></element>
+    
+    <complexType name="configuration">
+    	<sequence>
+    		<element name="host" type="tns:virtualHost" maxOccurs="unbounded" minOccurs="0"></element>
+    	</sequence>
+    </complexType>
+
+    <complexType name="virtualHost">
+    	<sequence>
+    		<element name="name" type="string" maxOccurs="1"
+    			minOccurs="1">
+    		</element>
+    		<element name="alias" maxOccurs="unbounded" minOccurs="0"
+    			type="tns:serverAlias">
+    		</element>
+    		<choice maxOccurs="1" minOccurs="1">
+    			<element name="proxy" type="string"></element>
+    			<element name="dirlist" type="tns:DirList"></element>
+
+    			<element name="php" type="string"></element>
+    			<element name="wsgi" type="string"></element>
+    		</choice>
+    	</sequence>
+    </complexType>
+    <complexType name="serverAlias">
+    	<simpleContent>
+    		<extension base="string">
+    			<attribute name="redirect" type="boolean"></attribute>
+    		</extension>
+    	</simpleContent>
+    </complexType>
+
+    <complexType name="DirList">
+    	<simpleContent>
+    		<extension base="string">
+    			<attribute name="dav" type="boolean"></attribute>
+    		</extension>
+    	</simpleContent>
+    </complexType>
+</schema>
