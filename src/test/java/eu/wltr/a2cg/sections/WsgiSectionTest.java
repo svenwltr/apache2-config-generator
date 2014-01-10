@@ -2,6 +2,7 @@ package eu.wltr.a2cg.sections;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.InOrder;
 
 public class WsgiSectionTest extends AbstractSectionTest {
 	
@@ -18,12 +19,12 @@ public class WsgiSectionTest extends AbstractSectionTest {
 		host.setWsgi("/var/www/website.wsgi");
 		section.print(host.getWsgi(), host);
 
-		assertOutputEquals("%s%n%s%n%s%n%s%n%s%n%n%n",
-				"WSGIScriptAlias / /var/www/website.wsgi",
-				"<Directory /var/www>",
-				"    Options +ExecCGI",
-				"    AddHandler wsgi-script .wsgi",
-				"</Directory>");
+		verifyDirective("WSGIScriptAlias", "/", "/var/www/website.wsgi");
+
+		InOrder inOrder = verifyBeginScope("Directory", "/var/www");
+		verifyDirective(inOrder, "Options", "+ExecCGI");
+		verifyDirective(inOrder, "AddHandler", "wsgi-script", ".wsgi");
+		verifyEndScope(inOrder, "Directory");
 
 	}
 

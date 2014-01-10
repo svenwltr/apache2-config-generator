@@ -1,7 +1,9 @@
 package eu.wltr.a2cg.sections;
 
+
 import org.junit.Before;
 import org.junit.Test;
+
 
 public class PhpSectionTest extends AbstractSectionTest {
 	
@@ -10,7 +12,6 @@ public class PhpSectionTest extends AbstractSectionTest {
 	@Before
 	public void setUp() {
 		section = new PhpSection(printer);
-
 	}
 
 	@Test
@@ -19,7 +20,7 @@ public class PhpSectionTest extends AbstractSectionTest {
 
 		section.print(host.getPhp(), host);
 
-		assertOutputEquals("%s%n%n", "DocumentRoot /var/www/");
+		verifyDirective("DocumentRoot", "/var/www/");;
 
 	}
 

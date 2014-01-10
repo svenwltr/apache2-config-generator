@@ -1,10 +1,14 @@
 package eu.wltr.a2cg.sections;
 
+
+import static org.mockito.Mockito.verify;
+
 import org.junit.Before;
 import org.junit.Test;
 
 import eu.wltr.a2cg.schema.ObjectFactory;
 import eu.wltr.a2cg.schema.ServerAlias;
+
 
 public class AliasSectionTest extends AbstractSectionTest {
 
@@ -29,14 +33,16 @@ public class AliasSectionTest extends AbstractSectionTest {
 	public void testSimple() {
 		host.getAlias().add(alias("www.example.com", null));
 		section.print(host.getAlias(), host);
-		assertOutputEquals("%s%n%n", "ServerAlias www.example.com");
+
+		verify(printer).writeDirective("ServerAlias", "www.example.com");
 
 	}
 
 	@Test
 	public void testEmpty() {
 		section.print(host.getAlias(), host);
-		assertOutputEquals("");
+
+		verifyNoPrint();
 
 	}
 
@@ -44,7 +50,8 @@ public class AliasSectionTest extends AbstractSectionTest {
 	public void testMissing() {
 		host.getAlias().add(alias(null, null));
 		section.print(host.getAlias(), host);
-		assertOutputEquals("%n");
+
+		verifyNoPrint();
 
 	}
 
@@ -52,11 +59,11 @@ public class AliasSectionTest extends AbstractSectionTest {
 	public void testRedirect() {
 		host.getAlias().add(alias("www.example.com", true));
 		section.print(host.getAlias(), host);
-		assertOutputEquals("%s%n%n%s%n%s%n%s%n%n",
-				"ServerAlias www.example.com",
-				"# Redirect www.example.com to example.com.",
-				"RewriteCond %{HTTP_HOST} ^www.example.com$",
-				"RewriteRule ^ http://example.com%{REQUEST_URI} [R=301,L]");
+
+		verifyDirective("ServerAlias", "www.example.com");
+		verifyDirective("RewriteCond", "%{HTTP_HOST}", "^www.example.com$");
+		verifyDirective("RewriteRule", "^", "http://example.com%{REQUEST_URI}",
+				"[R=301,L]");
 
 	}
 
@@ -64,7 +71,8 @@ public class AliasSectionTest extends AbstractSectionTest {
 	public void testNoRedirect() {
 		host.getAlias().add(alias("www.example.com", false));
 		section.print(host.getAlias(), host);
-		assertOutputEquals("%s%n%n", "ServerAlias www.example.com");
+
+		verifyDirective("ServerAlias", "www.example.com");
 
 	}
 

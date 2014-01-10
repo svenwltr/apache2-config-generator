@@ -1,7 +1,9 @@
 package eu.wltr.a2cg.sections;
 
+
 import org.junit.Before;
 import org.junit.Test;
+
 
 public class ProxySectionTest extends AbstractSectionTest {
 	
@@ -10,7 +12,6 @@ public class ProxySectionTest extends AbstractSectionTest {
 	@Before
 	public void setUp() {
 		section = new ProxySection(printer);
-
 	}
 
 	@Test
@@ -18,10 +19,8 @@ public class ProxySectionTest extends AbstractSectionTest {
 		host.setProxy("www.example.net");
 		section.print(host.getProxy(), host);
 
-		assertOutputEquals("%s%n%s%n%s%n%n",
-				"# Proxy to www.example.net",
-				"ProxyPass / www.example.net",
-				"ProxyPassReverse / www.example.net");
+		verifyDirective("ProxyPass", "/", "www.example.net");
+		verifyDirective("ProxyPassReverse", "/", "www.example.net");
 
 	}
 

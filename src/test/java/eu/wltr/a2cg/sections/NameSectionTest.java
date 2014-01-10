@@ -1,7 +1,9 @@
 package eu.wltr.a2cg.sections;
 
+
 import org.junit.Before;
 import org.junit.Test;
+
 
 public class NameSectionTest extends AbstractSectionTest {
 	
@@ -17,7 +19,7 @@ public class NameSectionTest extends AbstractSectionTest {
 	public void testSimple() {
 		section.print(host.getName(), host);
 
-		assertOutputEquals("%s%s%n%n", "ServerName ", host.getName());
+		verifyDirective("ServerName", host.getName());
 
 	}
 

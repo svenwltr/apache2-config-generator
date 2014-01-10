@@ -2,6 +2,7 @@ package eu.wltr.a2cg.sections;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.InOrder;
 
 import eu.wltr.a2cg.schema.ObjectFactory;
 import eu.wltr.a2cg.schema.Static;
@@ -31,8 +32,7 @@ public class StaticSectionTest extends AbstractSectionTest {
 		host.setStatic(createStatic("/var/www/", null, null));
 		section.print(host.getStatic(), host);
 
-		assertOutputEquals("%s%n%n",
-				"DocumentRoot /var/www/");
+		verifyDirective("DocumentRoot", "/var/www/");
 
 	}
 
@@ -41,11 +41,11 @@ public class StaticSectionTest extends AbstractSectionTest {
 		host.setStatic(createStatic("/var/www/", true, null));
 		section.print(host.getStatic(), host);
 
-		assertOutputEquals("%s%n%n%s%n%s%n%s%n%n",
-				"DocumentRoot /var/www/",
-				"<Directory /var/www/>",
-				"    DAV On",
-				"</Directory>");
+		verifyDirective("DocumentRoot", "/var/www/");
+
+		InOrder inOrder = verifyBeginScope("Directory", "/var/www/");
+		verifyDirective(inOrder, "DAV", "On");
+		verifyEndScope(inOrder, "Directory");
 
 	}
 
@@ -54,11 +54,11 @@ public class StaticSectionTest extends AbstractSectionTest {
 		host.setStatic(createStatic("/var/www/", null, true));
 		section.print(host.getStatic(), host);
 
-		assertOutputEquals("%s%n%n%s%n%s%n%s%n%n",
-				"DocumentRoot /var/www/",
-				"<Directory /var/www/>",
-				"    Options +Indexes +MultiViews",
-				"</Directory>");
+		verifyDirective("DocumentRoot", "/var/www/");
+
+		InOrder inOrder = verifyBeginScope("Directory", "/var/www/");
+		verifyDirective(inOrder, "Options", "+Indexes", "+MultiViews");
+		verifyEndScope(inOrder, "Directory");
 
 	}
 

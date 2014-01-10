@@ -1,9 +1,13 @@
 package eu.wltr.a2cg.sections;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
 
-import org.junit.Assert;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+
+import org.mockito.InOrder;
 
 import eu.wltr.a2cg.ConfigPrinter;
 import eu.wltr.a2cg.schema.ObjectFactory;
@@ -11,22 +15,43 @@ import eu.wltr.a2cg.schema.VirtualHost;
 
 public class AbstractSectionTest {
 
-	private ByteArrayOutputStream out;
-	protected ConfigPrinter printer;
-	protected VirtualHost host;
+	protected final VirtualHost host;
+	protected final ConfigPrinter printer;
 
 	public AbstractSectionTest() {
-		out = new ByteArrayOutputStream();
-		PrintStream writer = new PrintStream(out, true);
-		printer = new ConfigPrinter(writer);
+		printer = mock(ConfigPrinter.class);
+
 		host = new ObjectFactory().createVirtualHost();
 		host.setName("example.com");
 
 	}
 
-	protected void assertOutputEquals(String format, Object... args) {
-		String expected = String.format(format, args);
-		Assert.assertEquals(expected, out.toString());
+	public void verifyNoPrint() {
+		verify(printer, never()).writeDirective(any(String.class),
+				any(String.class));
+		verify(printer, never()).writeComment(any(String.class));
+
+	}
+
+	public void verifyDirective(String name, String... args) {
+		verify(printer).writeDirective(name, args);
+
+	}
+
+	public void verifyDirective(InOrder inOrder, String name, String... args) {
+		inOrder.verify(printer).writeDirective(name, args);
+
+	}
+
+	public InOrder verifyBeginScope(String name, String args) {
+		InOrder inOrder = inOrder(printer);
+		inOrder.verify(printer).beginScope(name, args);
+
+		return inOrder;
+	}
+
+	public void verifyEndScope(InOrder inOrder, String name) {
+		inOrder.verify(printer).endScope(name);
 
 	}
 
