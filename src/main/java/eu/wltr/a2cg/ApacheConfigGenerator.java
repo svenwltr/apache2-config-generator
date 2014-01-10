@@ -3,7 +3,6 @@ package eu.wltr.a2cg;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.xml.bind.JAXBException;
@@ -13,33 +12,19 @@ import org.apache.commons.beanutils.PropertyUtils;
 import eu.wltr.a2cg.schema.ConfigUnmarshaller;
 import eu.wltr.a2cg.schema.Configuration;
 import eu.wltr.a2cg.schema.VirtualHost;
-import eu.wltr.a2cg.sections.AliasSection;
-import eu.wltr.a2cg.sections.NameSection;
-import eu.wltr.a2cg.sections.PhpSection;
-import eu.wltr.a2cg.sections.ProxySection;
-import eu.wltr.a2cg.sections.StaticSection;
-import eu.wltr.a2cg.sections.WsgiSection;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class ApacheConfigGenerator {
 
 	private final ConfigPrinter printer;
 	private final Configuration config;
-	private final LinkedHashMap<String, ConfigSection> sections;
+	private final SectionFactory sf;
 
 	public ApacheConfigGenerator(InputStream in, OutputStream out)
 			throws JAXBException {
-		printer = new ConfigPrinter(out);
 		config = ConfigUnmarshaller.load(in);
-
-		sections = new LinkedHashMap<String, ConfigSection>();
-
-		sections.put("name", new NameSection(printer));
-		sections.put("alias", new AliasSection(printer));
-		sections.put("php", new PhpSection(printer));
-		sections.put("wsgi", new WsgiSection(printer));
-		sections.put("proxy", new ProxySection(printer));
-		sections.put("static", new StaticSection(printer));
+		printer = new ConfigPrinter(out);
+		sf = new SectionFactory(printer);
 
 	}
 
@@ -57,7 +42,7 @@ public class ApacheConfigGenerator {
 
 			Map<String, Object> elements = getElements(host);
 
-			for (String key : sections.keySet()) {
+			for (String key : sf.getKeys()) {
 				if(!elements.containsKey(key))
 					continue;
 				
@@ -66,7 +51,7 @@ public class ApacheConfigGenerator {
 				if(value == null)
 					continue;
 				
-				ConfigSection section = sections.get(key);
+				ConfigSection section = sf.get(key);
 				section.print(value, host);
 
 			}
