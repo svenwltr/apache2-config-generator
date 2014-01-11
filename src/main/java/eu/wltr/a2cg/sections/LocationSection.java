@@ -29,6 +29,7 @@ public class LocationSection implements ConfigRootSection<Location> {
 	}
 
 	@Override
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void print(Location location, VirtualHost host) {
 		Map<String, Object> elements = Utils.getBeanProperties(location);
 
@@ -38,8 +39,8 @@ public class LocationSection implements ConfigRootSection<Location> {
 			if (value == null)
 				continue;
 
-			if (List.class.isAssignableFrom(value.getClass()))
-				for (Object item : (List<Object>) value)
+			if (value instanceof List)
+				for (Object item : (List<?>) value)
 					section.print(item, location);
 
 			else

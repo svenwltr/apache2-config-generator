@@ -9,8 +9,8 @@ import org.apache.commons.beanutils.PropertyUtils;
 
 public class Utils {
 
-	@SuppressWarnings({ "rawtypes" })
-	public static Map getBeanProperties(Object obj) {
+	@SuppressWarnings({ "unchecked" })
+	public static Map<String, Object> getBeanProperties(Object obj) {
 		try {
 			return PropertyUtils.describe(obj);
 
