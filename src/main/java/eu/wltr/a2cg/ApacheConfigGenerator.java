@@ -1,8 +1,10 @@
 package eu.wltr.a2cg;
 
+
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 import java.util.Map;
 
 import javax.xml.bind.JAXBException;
@@ -52,7 +54,14 @@ public class ApacheConfigGenerator {
 					continue;
 				
 				ConfigSection section = sf.get(key);
-				section.print(value, host);
+
+				if (List.class.isAssignableFrom(value.getClass())) {
+					for (Object item : (List<Object>) value)
+						section.print(item, host);
+
+				} else {
+					section.print(value, host);
+				}
 
 			}
 

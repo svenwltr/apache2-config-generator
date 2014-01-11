@@ -31,25 +31,15 @@ public class AliasSectionTest extends AbstractSectionTest {
 
 	@Test
 	public void testSimple() {
-		host.getAlias().add(alias("www.example.com", null));
-		section.print(host.getAlias(), host);
+		section.print(alias("www.example.com", null), host);
 
 		verify(printer).writeDirective("ServerAlias", "www.example.com");
 
 	}
 
 	@Test
-	public void testEmpty() {
-		section.print(host.getAlias(), host);
-
-		verifyNoPrint();
-
-	}
-
-	@Test
 	public void testMissing() {
-		host.getAlias().add(alias(null, null));
-		section.print(host.getAlias(), host);
+		section.print(alias(null, null), host);
 
 		verifyNoPrint();
 
@@ -57,8 +47,7 @@ public class AliasSectionTest extends AbstractSectionTest {
 
 	@Test
 	public void testRedirect() {
-		host.getAlias().add(alias("www.example.com", true));
-		section.print(host.getAlias(), host);
+		section.print(alias("www.example.com", true), host);
 
 		verifyDirective("ServerAlias", "www.example.com");
 		verifyDirective("RewriteCond", "%{HTTP_HOST}", "^www.example.com$");
@@ -69,8 +58,7 @@ public class AliasSectionTest extends AbstractSectionTest {
 
 	@Test
 	public void testNoRedirect() {
-		host.getAlias().add(alias("www.example.com", false));
-		section.print(host.getAlias(), host);
+		section.print(alias("www.example.com", false), host);
 
 		verifyDirective("ServerAlias", "www.example.com");
 
