@@ -1,16 +1,26 @@
 package eu.wltr.a2cg.sections;
 
 import eu.wltr.a2cg.ConfigPrinter;
-import eu.wltr.a2cg.ConfigSection;
+import eu.wltr.a2cg.ConfigRootSection;
+import eu.wltr.a2cg.ConfigSubSection;
+import eu.wltr.a2cg.schema.Location;
 import eu.wltr.a2cg.schema.Static;
 import eu.wltr.a2cg.schema.VirtualHost;
 
-public class StaticSection implements ConfigSection<Static> {
+
+public class StaticSection implements ConfigRootSection<Static>,
+		ConfigSubSection<Static> {
 
 	private ConfigPrinter printer;
 
 	public StaticSection(ConfigPrinter printer) {
 		this.printer = printer;
+
+	}
+
+	@Override
+	public String getSlug() {
+		return "static";
 
 	}
 
@@ -32,6 +42,13 @@ public class StaticSection implements ConfigSection<Static> {
 			printer.endScope("Directory");
 
 		}
+
+	}
+
+	@Override
+	public void print(Static static_, Location location) {
+		printer.writeDirective("Alias", location.getPath(), static_.getValue());
+		printer.writeNewline();
 
 	}
 }

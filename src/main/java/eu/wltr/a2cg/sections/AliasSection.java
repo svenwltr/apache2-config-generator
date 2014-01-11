@@ -1,17 +1,23 @@
 package eu.wltr.a2cg.sections;
 
 import eu.wltr.a2cg.ConfigPrinter;
-import eu.wltr.a2cg.ConfigSection;
+import eu.wltr.a2cg.ConfigRootSection;
 import eu.wltr.a2cg.schema.ServerAlias;
 import eu.wltr.a2cg.schema.VirtualHost;
 
 
-public class AliasSection implements ConfigSection<ServerAlias> {
+public class AliasSection implements ConfigRootSection<ServerAlias> {
 
 	private ConfigPrinter printer;
 
 	public AliasSection(ConfigPrinter printer) {
 		this.printer = printer;
+
+	}
+
+	@Override
+	public String getSlug() {
+		return "alias";
 
 	}
 

@@ -3,15 +3,21 @@ package eu.wltr.a2cg.sections;
 import java.io.File;
 
 import eu.wltr.a2cg.ConfigPrinter;
-import eu.wltr.a2cg.ConfigSection;
+import eu.wltr.a2cg.ConfigRootSection;
 import eu.wltr.a2cg.schema.VirtualHost;
 
-public class WsgiSection implements ConfigSection<String> {
+public class WsgiSection implements ConfigRootSection<String> {
 
 	private ConfigPrinter printer;
 
 	public WsgiSection(ConfigPrinter printer) {
 		this.printer = printer;
+
+	}
+
+	@Override
+	public String getSlug() {
+		return "wsgi";
 
 	}
 

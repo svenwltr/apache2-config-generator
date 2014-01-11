@@ -1,6 +1,8 @@
 package eu.wltr.a2cg;
 
-import java.util.LinkedHashMap;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import eu.wltr.a2cg.sections.AliasSection;
 import eu.wltr.a2cg.sections.LocationSection;
@@ -12,28 +14,40 @@ import eu.wltr.a2cg.sections.WsgiSection;
 
 public class SectionFactory {
 
-	private final LinkedHashMap<String, ConfigSection<?>> sections;
+	private final List<ConfigSection> sections;
 
 	public SectionFactory(ConfigPrinter printer) {
-		sections = new LinkedHashMap<String, ConfigSection<?>>();
+		sections = new ArrayList<ConfigSection>();
 
-		sections.put("name", new NameSection(printer));
-		sections.put("alias", new AliasSection(printer));
-		sections.put("php", new PhpSection(printer));
-		sections.put("wsgi", new WsgiSection(printer));
-		sections.put("proxy", new ProxySection(printer));
-		sections.put("static", new StaticSection(printer));
-		sections.put("location", new LocationSection(this, printer));
-
-	}
-
-	public Iterable<String> getKeys() {
-		return sections.keySet();
+		sections.add(new NameSection(printer));
+		sections.add(new AliasSection(printer));
+		sections.add(new PhpSection(printer));
+		sections.add(new WsgiSection(printer));
+		sections.add(new ProxySection(printer));
+		sections.add(new StaticSection(printer));
+		sections.add(new LocationSection(this, printer));
 
 	}
 
-	public ConfigSection<?> get(String key) {
-		return sections.get(key);
+	public Iterable<ConfigRootSection<?>> getRootSections() {
+		List<ConfigRootSection<?>> list = new ArrayList<ConfigRootSection<?>>();
+
+		for (ConfigSection section : sections)
+			if (section instanceof ConfigRootSection<?>)
+				list.add((ConfigRootSection<?>) section);
+
+		return list;
+
+	}
+
+	public Iterable<ConfigSubSection<?>> getSubSections() {
+		List<ConfigSubSection<?>> list = new ArrayList<ConfigSubSection<?>>();
+
+		for (ConfigSection section : sections)
+			if (section instanceof ConfigSubSection<?>)
+				list.add((ConfigSubSection<?>) section);
+
+		return list;
 
 	}
 

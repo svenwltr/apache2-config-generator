@@ -3,19 +3,16 @@ package eu.wltr.a2cg;
 
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map;
 
 import javax.xml.bind.JAXBException;
 
-import org.apache.commons.beanutils.PropertyUtils;
-
 import eu.wltr.a2cg.schema.ConfigUnmarshaller;
 import eu.wltr.a2cg.schema.Configuration;
 import eu.wltr.a2cg.schema.VirtualHost;
 
-@SuppressWarnings({ "rawtypes", "unchecked" })
+
 public class ApacheConfigGenerator {
 
 	private final ConfigPrinter printer;
@@ -42,44 +39,25 @@ public class ApacheConfigGenerator {
 			printer.writeComment("");
 			printer.beginScope("VirtualHost", "*:80");
 
-			Map<String, Object> elements = getElements(host);
+			Map<String, Object> elements = Utils.getBeanProperties(host);
 
-			for (String key : sf.getKeys()) {
-				if(!elements.containsKey(key))
-					continue;
-				
-				Object value = elements.get(key);
-				
-				if(value == null)
-					continue;
-				
-				ConfigSection section = sf.get(key);
+			for (ConfigRootSection section : sf.getRootSections()) {
+				Object value = elements.get(section.getSlug());
 
-				if (List.class.isAssignableFrom(value.getClass())) {
+				if (value == null)
+					continue;
+
+				if (List.class.isAssignableFrom(value.getClass()))
 					for (Object item : (List<Object>) value)
 						section.print(item, host);
 
-				} else {
+				else
 					section.print(value, host);
-				}
 
 			}
 
 			printer.endScope("VirtualHost");
 			printer.writeNewline();
-
-		}
-
-	}
-
-	private Map getElements(VirtualHost host) {
-		try {
-			return PropertyUtils.describe(host);
-
-		} catch (IllegalAccessException | InvocationTargetException
-				| NoSuchMethodException e) {
-			e.printStackTrace();
-			throw new AssertionError(e);
 
 		}
 
