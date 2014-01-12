@@ -27,6 +27,14 @@ public class ApacheConfigGenerator {
 
 	}
 
+	protected ApacheConfigGenerator(ConfigPrinter printer,
+			Configuration config, SectionFactory sf) {
+		this.printer = printer;
+		this.config = config;
+		this.sf = sf;
+
+	}
+
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void generate() {
 
@@ -48,7 +56,7 @@ public class ApacheConfigGenerator {
 				if (value == null)
 					continue;
 
-				if (List.class.isAssignableFrom(value.getClass()))
+				if (value instanceof List)
 					for (Object item : (List) value)
 						section.print(item, host);
 
